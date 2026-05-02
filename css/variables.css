@@ -1,0 +1,32 @@
+:root {
+  --color-bg: #faf8f5;
+  --color-bg-elevated: #ffffff;
+  --color-text: #2c2a26;
+  --color-text-muted: #5c5852;
+  --color-accent: #6d5c4d;
+  --color-accent-soft: #e8e2da;
+  --color-border: #e5dfd6;
+  --color-line: rgba(44, 42, 38, 0.08);
+
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Source Sans 3", system-ui, sans-serif;
+
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --shadow-soft: 0 4px 24px rgba(44, 42, 38, 0.06);
+  --shadow-card: 0 8px 32px rgba(44, 42, 38, 0.08);
+
+  --max-width: 1120px;
+  --header-height: 72px;
+
+  --transition: 0.2s ease;
+}

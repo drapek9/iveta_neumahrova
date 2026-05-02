@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Aktuální nabídka nemovitostí — Iveta Neumahrová, osobní realitní makléřka." />
+    <title>Nabídka nemovitostí · Iveta Neumahrová</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Přeskočit na obsah</a>
+    <div data-partial="header"></div>
+
+    <main id="main" class="container">
+      <header class="page-header">
+        <h1>Nabídka nemovitostí</h1>
+        <p>
+          Seznam se načítá dynamicky — v produkci ho napojíme na vaše API nebo portál (např. Sreality,
+          Dumrealit). Zatím uvidíte ukázková data ve struktuře připravené pro přenos.
+        </p>
+      </header>
+
+      <div data-property-detail hidden></div>
+      <div data-properties-list></div>
+    </main>
+
+    <div data-partial="footer"></div>
+    <script type="module" src="js/pages/listings.js"></script>
+  </body>
+</html>
