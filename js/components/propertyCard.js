@@ -1,12 +1,14 @@
-import { formatPrice } from "../services/propertiesService.js";
+import { formatListingPrice } from "../services/propertiesService.js";
 
 /**
  * @param {object} property
- * @param {{ linkToDetail?: boolean }} [opts]
+ * @param {{ linkToDetail?: boolean }} [opts] – výchozí false (klik na kartu nic nedělá)
  */
 export function renderPropertyCard(property, opts = {}) {
-  const linkToDetail = opts.linkToDetail !== false;
-  const price = formatPrice(property.price, property.currency);
+  const linkToDetail = opts.linkToDetail === true;
+  const price = formatListingPrice(property);
+  const isExternal = /^https?:\/\//.test(property.detailUrl);
+  const linkRel = isExternal ? ' rel="noopener noreferrer" target="_blank"' : "";
   const inner = `
     <div class="property-card__image">
       <img src="${escapeHtml(property.imageUrl)}" alt="" loading="lazy" width="800" height="600" />
@@ -19,7 +21,7 @@ export function renderPropertyCard(property, opts = {}) {
   `;
 
   if (linkToDetail) {
-    return `<a class="property-card" href="${escapeHtml(property.detailUrl)}">${inner}</a>`;
+    return `<a class="property-card" href="${escapeHtml(property.detailUrl)}"${linkRel}>${inner}</a>`;
   }
   return `<article class="property-card">${inner}</article>`;
 }

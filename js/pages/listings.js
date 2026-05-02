@@ -1,5 +1,9 @@
 import { injectPartial } from "../app.js";
-import { fetchProperties, getPropertyById, formatPrice } from "../services/propertiesService.js";
+import {
+  fetchProperties,
+  getPropertyById,
+  formatListingPrice,
+} from "../services/propertiesService.js";
 import { renderPropertyCard } from "../components/propertyCard.js";
 
 function escapeHtml(str) {
@@ -10,12 +14,19 @@ function escapeHtml(str) {
 }
 
 function renderDetail(property) {
-  const price = formatPrice(property.price, property.currency);
+  const price = formatListingPrice(property);
+  const externalInzerat =
+    property.detailUrl && /^https?:\/\//.test(property.detailUrl)
+      ? `<p style="margin-bottom: var(--space-md)">
+          <a class="btn btn--primary" href="${escapeHtml(property.detailUrl)}" target="_blank" rel="noopener noreferrer">Kompletní inzerát na Dumrealit.cz</a>
+        </p>`
+      : "";
   return `
     <article class="property-detail section section--tight" style="padding-top: 0">
       <p style="margin-bottom: var(--space-md)">
         <a href="nabidka.html" class="nav__link">← Zpět na celou nabídku</a>
       </p>
+      ${externalInzerat}
       <div class="property-detail__hero">
         <img src="${escapeHtml(property.imageUrl)}" alt="" width="800" height="500" />
       </div>
@@ -23,7 +34,7 @@ function renderDetail(property) {
       <p class="section__lead" style="margin-bottom: var(--space-md)">${escapeHtml(property.locality)} · <strong>${escapeHtml(price)}</strong></p>
       <div class="prose">
         <p>${escapeHtml(property.excerpt || "")}</p>
-        <p>Více informací vám ráda poskytnu osobně nebo po telefonu — každá nemovitost má svůj příběh a vyprávím ho v kontextu vaší situace.</p>
+        <p>Podrobnosti vám ráda upřesním osobně nebo po telefonu.</p>
       </div>
       <p style="margin-top: var(--space-lg)">
         <a class="btn btn--primary" href="kontakt.html?nemovitost=${escapeHtml(property.id)}">Mám zájem o více informací</a>

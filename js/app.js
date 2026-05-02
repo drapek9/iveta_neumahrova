@@ -96,15 +96,9 @@ export function initContactForm(formSelector) {
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const fd = new FormData(form);
-    const payload = Object.fromEntries(fd.entries());
-
-    // TODO: POST na váš backend / Formspree / CMS webhook
-    console.log("Kontaktní formulář (demo):", payload);
-
     if (status) {
       status.textContent =
-        "Děkuji za zprávu. Ozvu se vám co nejdříve — obvykle do jednoho pracovního dne.";
+        "Děkuji za zprávu, brzy se ozvu.";
       status.className = "form-status form-status--ok is-visible";
     }
     form.reset();

@@ -1,76 +1,26 @@
-/**
- * Služba pro načítání nemovitostí.
- *
- * Produkční napojení: nahraďte getMockProperties() voláním API (Sreality, Dumrealit, vlastní CMS).
- * Typicky: GET /api/listings → mapování polí do unified shape níže.
- */
-
-const MOCK_LISTINGS = [
+const LISTINGS = [
   {
-    id: "1",
-    title: "Světlý byt s výhledem do zeleně",
-    locality: "Praha 6 — Dejvice",
-    price: 12490000,
+    id: "656109",
+    title: "Pronájem bytu 2+1, 48 m²",
+    locality: "Anastázova, Praha 6 - Břevnov",
+    price: 22000,
     currency: "CZK",
-    imageUrl: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80",
-    detailUrl: "nabidka.html?id=1",
-    excerpt: "Klidná adresa, promyšlené dispozice — pro majitele, kterým záleží na tom, komu byt předají.",
-  },
-  {
-    id: "2",
-    title: "Rodinný dům s duší",
-    locality: "Brno — Žabovřesky",
-    price: 18990000,
-    currency: "CZK",
-    imageUrl: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80",
-    detailUrl: "nabidka.html?id=2",
-    excerpt: "Prostor pro život, ne jen pro „prodej za každou cenu“. Vhodné pro rodinu hledající stabilitu.",
-  },
-  {
-    id: "3",
-    title: "Designový loft v širším centru",
-    locality: "Praha 5 — Smíchov",
-    price: 9850000,
-    currency: "CZK",
-    imageUrl: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
-    detailUrl: "nabidka.html?id=3",
-    excerpt: "Pro klienty, kteří chtějí kombinovat městský rytmus s osobním klidem.",
-  },
-  {
-    id: "4",
-    title: "Zahrada, klid, dobré sousedy",
-    locality: "Okolí Prahy — západ",
-    price: 15650000,
-    currency: "CZK",
-    imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80",
-    detailUrl: "nabidka.html?id=4",
-    excerpt: "Méně hektiky, víc prostoru — typicky spolupracuji s majiteli, kteří řeší i „komu prodávám“.",
+    pricePeriod: "měsíc",
+    imageUrl: "images/prodej_bytu_2_1.jpg",
+    detailUrl:
+      "https://www.dumrealit.cz/nemovitosti/obec-praha-554782/pronajem-bytu-2-1-praha-48m2_656109",
+    excerpt:
+      "Pronájem 2+1, 48 m² s balkonem 13 m² v 6. NP domu v Břevnově. Slunný byt s výhledem z balkonu, kuchyň se sporákem, troubou, myčkou a lednicí, obývací pokoj s vstupem na balkon, ložnice se skříní. Koupelna s vanou, toaleta zvlášť, sklepní kóje. Plastová okna, dálkové vytápění, dům po zateplení. Poplatky nad rámec nájmu; bez domácích zvířat, k dispozici ihned. Metro A cca 15 min, klidná lokalita s občanskou vybaveností a zelení (Obora Hvězda, Šárecké údolí). Ev. č. 656109.",
   },
 ];
 
-/**
- * @returns {Promise<Array<{
- *   id: string,
- *   title: string,
- *   locality: string,
- *   price: number,
- *   currency: string,
- *   imageUrl: string,
- *   detailUrl: string,
- *   excerpt?: string
- * }>>}
- */
 export async function fetchProperties() {
-  // TODO produkce: const res = await fetch('/api/listings', { headers: { Accept: 'application/json' } });
-  // const data = await res.json();
-  // return normalizeApiResponse(data);
-
   await new Promise((r) => setTimeout(r, 180));
-  return [...MOCK_LISTINGS];
+  return [...LISTINGS];
 }
 
 export function getPropertyById(id) {
-  return MOCK_LISTINGS.find((p) => p.id === String(id)) || null;
+  return LISTINGS.find((p) => p.id === String(id)) || null;
 }
 
 export function formatPrice(amount, currency = "CZK") {
@@ -79,4 +29,12 @@ export function formatPrice(amount, currency = "CZK") {
     currency,
     maximumFractionDigits: 0,
   }).format(amount);
+}
+
+export function formatListingPrice(property) {
+  const base = formatPrice(property.price, property.currency);
+  if (property.pricePeriod) {
+    return `${base} / ${property.pricePeriod}`;
+  }
+  return base;
 }
