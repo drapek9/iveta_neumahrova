@@ -2,7 +2,7 @@ import { formatListingPrice } from "../services/propertiesService.js";
 
 /**
  * @param {object} property
- * @param {{ linkToDetail?: boolean }} [opts] – výchozí false (klik na kartu nic nedělá)
+ * @param {{ linkToDetail?: boolean }} [opts] – výchozí false (karta je klikací, ale bez přechodu)
  */
 export function renderPropertyCard(property, opts = {}) {
   const linkToDetail = opts.linkToDetail === true;
@@ -23,7 +23,7 @@ export function renderPropertyCard(property, opts = {}) {
   if (linkToDetail) {
     return `<a class="property-card" href="${escapeHtml(property.detailUrl)}"${linkRel}>${inner}</a>`;
   }
-  return `<article class="property-card">${inner}</article>`;
+  return `<a class="property-card property-card--noop" href="javascript:void(0)" aria-disabled="true">${inner}</a>`;
 }
 
 function escapeHtml(str) {

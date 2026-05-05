@@ -24,7 +24,7 @@ function renderDetail(property) {
   return `
     <article class="property-detail section section--tight" style="padding-top: 0">
       <p style="margin-bottom: var(--space-md)">
-        <a href="nabidka.html" class="nav__link">← Zpět na celou nabídku</a>
+        <a href="nabidka.html" class="nav__link">← Zpět na nemovitosti</a>
       </p>
       ${externalInzerat}
       <div class="property-detail__hero">
@@ -46,6 +46,9 @@ function renderDetail(property) {
 document.addEventListener("DOMContentLoaded", async () => {
   await injectPartial("[data-partial=header]", "header.html");
   await injectPartial("[data-partial=footer]", "footer.html");
+
+  const { initPageMotion, refreshMotion } = await import("../motion.js");
+  initPageMotion();
 
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
@@ -75,9 +78,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (e) {
       console.error(e);
       listRoot.innerHTML =
-        '<p class="section__lead">Nepodařilo se načíst nabídku. Zkuste obnovit stránku.</p>';
+        '<p class="section__lead">Nepodařilo se načíst nemovitosti. Zkuste obnovit stránku.</p>';
     } finally {
       listRoot.classList.remove("is-loading");
     }
   }
+
+  refreshMotion();
 });

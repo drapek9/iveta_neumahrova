@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Aktuální nabídka nemovitostí - Iveta Neumahrová, osobní realitní makléřka." />
-    <title>Nabídka nemovitostí · Iveta Neumahrová</title>
+    <meta name="description" content="Všechny aktuálně nabízené nemovitosti – Iveta Neumahrová, osobní realitní makléřka." />
+    <title>Nemovitosti · Iveta Neumahrová</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -18,14 +18,30 @@
     <a class="skip-link" href="#main">Přeskočit na obsah</a>
     <div data-partial="header"></div>
 
-    <main id="main" class="container">
-      <header class="page-header">
-        <h1>Nabídka nemovitostí</h1>
-        <p>Aktuální výběr - detaily k nemovitosti doplním na vyžádání.</p>
-      </header>
+    <main id="main" class="page-listings">
+      <section class="section page-listings__list" aria-labelledby="listings-page-title">
+        <div class="container">
+          <header class="page-header">
+            <h1 id="listings-page-title">Nemovitosti</h1>
+            <p>Všechny aktuálně nabízené nemovitosti.</p>
+          </header>
 
-      <div data-property-detail hidden></div>
-      <div data-properties-list></div>
+          <div data-property-detail hidden></div>
+          <div data-properties-list></div>
+        </div>
+      </section>
+
+      <section class="section page-listings__cta" aria-labelledby="listing-cta-title">
+        <div class="container">
+          <div class="cta-band">
+            <h2 id="listing-cta-title">Domluvte si schůzku</h2>
+            <p>
+              Krátký hovor nebo osobní setkání - bez závazku zjistíte, jestli vám můj přístup vyhovuje.
+            </p>
+            <a class="btn btn--primary" href="kontakt.html">Napište mi nebo zavolejte</a>
+          </div>
+        </div>
+      </section>
     </main>
 
     <div data-partial="footer"></div>

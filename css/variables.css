@@ -29,4 +29,13 @@
   --header-height: 72px;
 
   --transition: 0.2s ease;
+
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-reveal: 0.55s;
+  --motion-hover: 0.22s;
+
+  /* Dekorace pozadí (site-wide) */
+  --bg-deco-wash: rgba(109, 92, 77, 0.065);
+  --bg-deco-soft: rgba(232, 226, 218, 0.55);
+  --bg-deco-dot: rgba(44, 42, 38, 0.038);
 }

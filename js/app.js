@@ -82,9 +82,12 @@ export async function mountPropertyGrid(selector, options = {}) {
   } catch (e) {
     console.error(e);
     root.innerHTML =
-      '<p class="section__lead">Momentálně se nepodařilo načíst nabídku. Zkuste to prosím znovu později.</p>';
+      '<p class="section__lead">Momentálně se nepodařilo načíst nemovitosti. Zkuste to prosím znovu později.</p>';
   } finally {
     root.classList.remove("is-loading");
+    import("./motion.js")
+      .then((m) => m.refreshMotion())
+      .catch(() => {});
   }
 }
 

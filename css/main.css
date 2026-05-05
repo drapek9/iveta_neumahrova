@@ -1,11 +1,56 @@
 @import "./variables.css";
 
+html {
+  background-color: var(--color-bg);
+}
+
 body {
+  position: relative;
   font-family: var(--font-body);
   font-size: 1.0625rem;
   line-height: 1.65;
   color: var(--color-text);
-  background-color: var(--color-bg);
+  background-color: transparent;
+  isolation: isolate;
+  /* Místo pro pevnou hlavičku (position: fixed) */
+  padding-top: var(--header-height);
+}
+
+/* Jemné pozadí: měkké skvrny + diagonála + drobná tečkovaná mřížka */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 120% 90% at 0% -15%, var(--bg-deco-wash), transparent 52%),
+    radial-gradient(ellipse 85% 65% at 100% 8%, var(--bg-deco-soft), transparent 48%),
+    radial-gradient(ellipse 75% 55% at 18% 95%, var(--bg-deco-wash), transparent 50%),
+    linear-gradient(
+      168deg,
+      transparent 0%,
+      rgba(109, 92, 77, 0.025) 42%,
+      transparent 72%
+    ),
+    radial-gradient(circle at 1px 1px, var(--bg-deco-dot) 1px, transparent 0);
+  background-size: auto, auto, auto, auto, 30px 30px;
+  background-attachment: fixed, fixed, fixed, fixed, scroll;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+[data-partial="header"] {
+  z-index: 100;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    background-attachment: scroll, scroll, scroll, scroll, scroll;
+  }
 }
 
 .skip-link {
@@ -30,9 +75,37 @@ body {
   padding-block: var(--space-xl);
 }
 
+/* Stránka nemovitostí, kontakt atd.: jedna barva jako html – bez color-mix přes dekor */
+#main:not(.page-home):not(.page-about) {
+  background-color: var(--color-bg);
+}
+
+#main:not(.page-home):not(.page-about) > .section {
+  background-color: transparent;
+}
+
+/* Nemovitosti: dvě sekce jako blok úvodky (lichý pás) */
+#main.page-listings:not(.page-home):not(.page-about) {
+  background-color: transparent;
+}
+
+#main.page-listings:not(.page-home):not(.page-about) > .section {
+  background-color: var(--color-bg);
+}
+
+@supports (background-color: color-mix(in srgb, white 50%, black)) {
+  #main.page-listings:not(.page-home):not(.page-about) > .section {
+    background-color: color-mix(in srgb, var(--color-bg) 91%, transparent);
+  }
+}
+
+#main.page-listings:not(.page-home):not(.page-about) > .section + .section {
+  border-top: 1px solid var(--color-line);
+}
+
 /* Úvodní stránka - střídavá pozadí sekcí */
 .page-home > .hero {
-  background-color: var(--color-bg);
+  background-color: transparent;
   border-bottom: 1px solid var(--color-line);
 }
 
@@ -42,6 +115,16 @@ body {
 
 .page-home > .section:nth-child(odd) {
   background-color: var(--color-bg);
+}
+
+@supports (background-color: color-mix(in srgb, white 50%, black)) {
+  .page-home > .section:nth-child(even) {
+    background-color: color-mix(in srgb, var(--color-bg-elevated) 94%, transparent);
+  }
+
+  .page-home > .section:nth-child(odd) {
+    background-color: color-mix(in srgb, var(--color-bg) 91%, transparent);
+  }
 }
 
 .page-home > .section + .section {
@@ -55,6 +138,16 @@ body {
 
 .page-about > .section:nth-child(odd) {
   background-color: var(--color-bg);
+}
+
+@supports (background-color: color-mix(in srgb, white 50%, black)) {
+  .page-about > .section:nth-child(even) {
+    background-color: color-mix(in srgb, var(--color-bg-elevated) 94%, transparent);
+  }
+
+  .page-about > .section:nth-child(odd) {
+    background-color: color-mix(in srgb, var(--color-bg) 91%, transparent);
+  }
 }
 
 .page-about > .section + .section {
@@ -90,17 +183,25 @@ body {
   margin: 0 0 var(--space-lg);
 }
 
-/* Header */
+/* Header – fixed: zůstává nahoře i při swipu / inerci (sticky na mobilu občas ujede) */
 .site-header {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
+  width: 100%;
+  max-width: 100%;
   height: var(--header-height);
   display: flex;
   align-items: center;
+  box-sizing: border-box;
   background: rgba(250, 248, 245, 0.92);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--color-line);
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .site-header__inner {
@@ -341,7 +442,7 @@ body {
 }
 
 .feature-card {
-  padding: var(--space-lg);
+  padding: 10px var(--space-lg) 20px;
   background: var(--color-bg-elevated);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-line);
@@ -492,7 +593,7 @@ body {
 }
 
 .testimonial {
-  padding: var(--space-lg);
+  padding: var(--space-md);
   background: #f8f6f3;
   border: 1px solid var(--color-line);
   border-left: 3px solid var(--color-accent);
@@ -504,6 +605,34 @@ body {
   margin: 0 0 var(--space-sm);
   font-size: 1rem;
   font-style: italic;
+  color: var(--color-text);
+}
+
+.testimonial.is-collapsed p {
+  line-clamp: 4;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.testimonial__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  margin: 0 0 var(--space-xs);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.testimonial__more:hover {
   color: var(--color-text);
 }
 
@@ -684,6 +813,16 @@ article.property-card:hover {
   margin-top: var(--space-xs);
 }
 
+.about-stat--in-intro {
+  margin-top: var(--space-lg);
+  max-width: min(100%, 20rem);
+  padding: 17.5px var(--space-sm);
+}
+
+.about-stat--in-intro .about-stat__figure {
+  margin-bottom: 0.125rem;
+}
+
 .about-stat__figure {
   font-family: var(--font-display);
   font-size: clamp(2rem, 4.5vw, 3rem);
@@ -706,6 +845,25 @@ article.property-card:hover {
   color: var(--color-text);
 }
 
+.about-statement {
+  max-width: 48rem;
+}
+
+.about-statement .section__title {
+  margin-bottom: var(--space-md);
+}
+
+.about-statement__text {
+  margin: 0;
+  padding: var(--space-md) 0 var(--space-sm) var(--space-lg);
+  border-left: 2px solid var(--color-accent);
+}
+
+.about-statement__text p {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
 .about-values {
   list-style: none;
   margin: var(--space-md) 0 0;
@@ -717,7 +875,7 @@ article.property-card:hover {
 
 @media (min-width: 640px) {
   .about-values {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-md);
   }
 }
@@ -748,9 +906,25 @@ article.property-card:hover {
 .about-services li {
   position: relative;
   padding-left: var(--space-lg);
-  font-size: 1.0625rem;
   color: var(--color-text);
   line-height: 1.45;
+}
+
+.about-services li strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.4vw, 1.45rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--color-accent);
+  margin: 0 0 0.28rem;
+}
+
+.about-services li p {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--color-text-muted);
 }
 
 .about-services li::before {
@@ -917,9 +1091,9 @@ article.property-card:hover {
 
 /* Footer */
 .site-footer {
-  padding: var(--space-xl) 0 0;
+  padding: var(--space-lg) 0 0;
   border-top: 1px solid var(--color-line);
-  margin-top: var(--space-xl);
+  margin-top: 0;
 }
 
 .site-footer__main {
@@ -1058,9 +1232,15 @@ article.property-card:hover {
   text-underline-offset: 3px;
 }
 
-/* Listing page header */
+/* Stránka nemovitostí (výpis) – spodní mez řeší .section; stejně jako padding CTA nad oddělovací čárou */
+.page-listings .property-grid {
+  gap: var(--space-xl);
+}
+
+/* Listing / kontakt: horní odstup řeší .section – bez dvojitého paddingu nad titulkem */
 .page-header {
-  padding-block: var(--space-xl) var(--space-md);
+  padding-top: 0;
+  padding-bottom: var(--space-md);
 }
 
 .page-header h1 {
@@ -1080,4 +1260,153 @@ article.property-card:hover {
 [data-properties-root].is-loading {
   opacity: 0.5;
   pointer-events: none;
+}
+
+/* Motion: nájezd myší + odkrytí při scrollu (motion.js) */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 1.1rem, 0);
+    transition:
+      opacity var(--motion-reveal) var(--motion-ease),
+      transform var(--motion-reveal) var(--motion-ease);
+  }
+
+  [data-reveal].is-revealed {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .btn {
+    transition:
+      transform var(--motion-hover) var(--motion-ease),
+      background var(--transition),
+      border-color var(--transition),
+      color var(--transition);
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  .logo {
+    transition: opacity var(--motion-hover) ease, transform var(--motion-hover) var(--motion-ease);
+  }
+
+  .logo:hover {
+    opacity: 0.9;
+  }
+
+  .nav__link {
+    transition: color var(--transition), font-weight 0.12s ease;
+  }
+
+  .site-footer .site-footer__links a,
+  .site-footer .site-footer__contact a {
+    transition: color var(--motion-hover) ease, opacity var(--motion-hover) ease;
+  }
+
+  .feature-card {
+    transition:
+      box-shadow var(--motion-hover) var(--motion-ease),
+      transform var(--motion-hover) var(--motion-ease),
+      border-color var(--motion-hover) ease;
+  }
+
+  .property-card {
+    transition:
+      box-shadow var(--motion-hover) var(--motion-ease),
+      transform var(--motion-hover) var(--motion-ease),
+      border-color var(--motion-hover) ease;
+  }
+
+  .testimonial {
+    transition:
+      box-shadow var(--motion-hover) var(--motion-ease),
+      transform var(--motion-hover) var(--motion-ease);
+  }
+
+  .testimonial:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card);
+  }
+
+  .cta-band {
+    transition: transform var(--motion-hover) var(--motion-ease), box-shadow var(--motion-hover) var(--motion-ease);
+  }
+
+  .cta-band:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(44, 42, 38, 0.12);
+  }
+
+  .hero__visual {
+    transition: transform var(--motion-reveal) var(--motion-ease), box-shadow var(--motion-hover) var(--motion-ease);
+  }
+
+  .hero__visual:hover {
+    transform: scale(1.015);
+  }
+
+  .hero__visual img {
+    transition: transform 0.65s var(--motion-ease);
+  }
+
+  .hero__visual:hover img {
+    transform: scale(1.03);
+  }
+
+  .process-steps > li {
+    transition: transform var(--motion-hover) var(--motion-ease);
+  }
+
+  .process-steps > li:hover {
+    transform: translateX(5px);
+  }
+
+  .form input,
+  .form textarea {
+    transition: border-color var(--motion-hover) ease, box-shadow var(--motion-hover) ease;
+  }
+
+  .about-values__item {
+    transition: transform var(--motion-hover) var(--motion-ease), box-shadow var(--motion-hover) ease;
+  }
+
+  .about-values__item:hover {
+    transform: translateY(-3px);
+  }
+
+  .about-services li {
+    transition: transform var(--motion-hover) ease;
+  }
+
+  .about-services li:hover {
+    transform: translateX(4px);
+  }
+
+  .contact-info dd a {
+    transition: color var(--motion-hover) ease, transform var(--motion-hover) ease;
+  }
+
+  .contact-info dd a:hover {
+    transform: translateX(3px);
+  }
+
+  .page-header {
+    transition: opacity var(--motion-reveal) ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
