@@ -3,8 +3,9 @@
   --color-bg-elevated: #ffffff;
   --color-text: #2c2a26;
   --color-text-muted: #5c5852;
-  --color-accent: #6d5c4d;
-  --color-accent-soft: #e8e2da;
+  /* Brand accent */
+  --color-accent: #bc093b;
+  --color-accent-soft: #fbe7ee;
   --color-border: #e5dfd6;
   --color-line: rgba(44, 42, 38, 0.08);
 
@@ -22,8 +23,8 @@
   --radius-md: 8px;
   --radius-lg: 12px;
 
-  --shadow-soft: 0 4px 24px rgba(44, 42, 38, 0.06);
-  --shadow-card: 0 8px 32px rgba(44, 42, 38, 0.08);
+  --shadow-soft: 0 8px 20px rgba(44, 42, 38, 0.05);
+  --shadow-card: 0 12px 28px rgba(44, 42, 38, 0.07);
 
   --max-width: 1120px;
   --header-height: 72px;
@@ -35,7 +36,7 @@
   --motion-hover: 0.22s;
 
   /* Dekorace pozadí (site-wide) */
-  --bg-deco-wash: rgba(109, 92, 77, 0.065);
-  --bg-deco-soft: rgba(232, 226, 218, 0.55);
-  --bg-deco-dot: rgba(44, 42, 38, 0.038);
+  --bg-deco-wash: rgba(188, 9, 59, 0.055);
+  --bg-deco-soft: rgba(251, 231, 238, 0.6);
+  --bg-deco-dot: rgba(44, 42, 38, 0.03);
 }

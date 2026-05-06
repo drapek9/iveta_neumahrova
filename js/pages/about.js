@@ -1,4 +1,4 @@
-import { injectPartial } from "../app.js";
+import { injectPartial, scrollToHashWithOffset } from "../app.js";
 
 function formatCzechYears(n) {
   if (n <= 0) return "méně než rok";
@@ -61,4 +61,5 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   initCareerStat();
   initTestimonialReadMore();
+  scrollToHashWithOffset();
 });

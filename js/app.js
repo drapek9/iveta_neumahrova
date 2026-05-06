@@ -23,6 +23,21 @@ export async function injectPartial(selector, partialName) {
   }
 }
 
+export function scrollToHashWithOffset() {
+  const hash = decodeURIComponent(window.location.hash || "");
+  if (!hash || hash === "#") return;
+
+  const target = document.querySelector(hash);
+  if (!target) return;
+
+  requestAnimationFrame(() => {
+    const header = document.querySelector(".site-header");
+    const headerHeight = header ? header.getBoundingClientRect().height : 0;
+    const top = window.scrollY + target.getBoundingClientRect().top - headerHeight - 16;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  });
+}
+
 function highlightCurrentNav() {
   const raw = window.location.pathname.split("/").pop();
   const currentPage = raw && raw.includes(".") ? raw : "index.html";
