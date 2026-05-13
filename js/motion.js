@@ -49,6 +49,15 @@ const REVEAL_SELECTOR = [
   ".property-card .property-card__meta",
   ".property-card__image",
   ".property-card__body",
+
+  /* About page */
+  ".about-photo",
+  ".about-stat",
+  ".page-about .about-layout .prose > p",
+  ".about-values__item",
+  ".about-statement__text p",
+  ".cta-band .btn",
+
   '[data-properties-list]:not(:empty)',
   '[data-property-detail]:not([hidden])',
 ].join(", ");
@@ -86,19 +95,42 @@ function setRevealVariant(el) {
     return;
   }
 
+  if (el.classList.contains("about-values__item")) {
+    const ul = el.parentElement;
+    const idx = ul ? Array.from(ul.children).indexOf(el) : 0;
+    el.setAttribute("data-reveal", idx % 2 === 0 ? "slide" : "slide-in");
+    return;
+  }
+
   if (
     el.classList.contains("property-card") ||
     el.classList.contains("service-card") ||
     el.classList.contains("feature-card") ||
     el.classList.contains("testimonial") ||
-    el.classList.contains("hero__visual")
+    el.classList.contains("hero__visual") ||
+    el.classList.contains("about-photo") ||
+    el.classList.contains("about-stat")
   ) {
     el.setAttribute("data-reveal", "card");
     return;
   }
 
+  if (el.matches(".about-statement__text p")) {
+    el.setAttribute("data-reveal", "rise");
+    return;
+  }
+
+  if (el.matches(".page-about .about-layout .prose > p")) {
+    el.setAttribute("data-reveal", "rise");
+    return;
+  }
+
   const tag = (el.tagName || "").toUpperCase();
   if (el.classList.contains("hero__actions")) {
+    el.setAttribute("data-reveal", "fade");
+    return;
+  }
+  if (el.matches(".cta-band .btn")) {
     el.setAttribute("data-reveal", "fade");
     return;
   }
@@ -122,7 +154,81 @@ function setRevealVariant(el) {
   el.setAttribute("data-reveal", "rise");
 }
 
+/**
+ * O mně: čitelná sekvence (foto → nadpis → odstavce → stat → hodnoty → text → reference → CTA).
+ * @returns {boolean} true = delay nastavený, false = použít výchozí logiku níže
+ */
+function applyAboutPageDelays(el) {
+  if (!el.closest(".page-about")) return false;
+  if (el.closest(".testimonial")) return false;
+
+  if (el.matches(".about-layout .about-photo")) {
+    el.style.setProperty("--reveal-delay", "0ms");
+    return true;
+  }
+  if (el.matches(".about-layout .prose > .section__title")) {
+    el.style.setProperty("--reveal-delay", "110ms");
+    return true;
+  }
+  if (el.matches(".about-layout .prose > p")) {
+    const prose = el.parentElement;
+    const ps = prose ? Array.from(prose.querySelectorAll(":scope > p")) : [];
+    const i = ps.indexOf(el);
+    el.style.setProperty("--reveal-delay", `${160 + Math.max(0, i) * 90}ms`);
+    return true;
+  }
+  if (el.matches(".about-stat")) {
+    el.style.setProperty("--reveal-delay", "380ms");
+    return true;
+  }
+  if (el.matches(".about-values-wrap > .section__title")) {
+    el.style.setProperty("--reveal-delay", "0ms");
+    return true;
+  }
+  if (el.classList.contains("about-values__item")) {
+    const ul = el.closest(".about-values");
+    const idx = ul ? Array.from(ul.children).indexOf(el) : 0;
+    el.style.setProperty("--reveal-delay", `${80 + Math.max(0, idx) * 115}ms`);
+    return true;
+  }
+  if (el.matches(".about-statement > .section__title")) {
+    el.style.setProperty("--reveal-delay", "0ms");
+    return true;
+  }
+  if (el.matches(".about-statement__text > p")) {
+    const wrap = el.parentElement;
+    const ps = wrap ? Array.from(wrap.querySelectorAll(":scope > p")) : [];
+    const i = ps.indexOf(el);
+    el.style.setProperty("--reveal-delay", `${110 + Math.max(0, i) * 100}ms`);
+    return true;
+  }
+  if (el.matches(".testimonial-head .section__title")) {
+    el.style.setProperty("--reveal-delay", "0ms");
+    return true;
+  }
+  if (el.matches(".testimonial-head .section__lead")) {
+    el.style.setProperty("--reveal-delay", "95ms");
+    return true;
+  }
+  if (el.matches(".cta-band h2")) {
+    el.style.setProperty("--reveal-delay", "0ms");
+    return true;
+  }
+  if (el.matches(".cta-band p")) {
+    el.style.setProperty("--reveal-delay", "90ms");
+    return true;
+  }
+  if (el.matches(".cta-band .btn")) {
+    el.style.setProperty("--reveal-delay", "185ms");
+    return true;
+  }
+
+  return false;
+}
+
 function setRevealDelay(el) {
+  if (applyAboutPageDelays(el)) return;
+
   // Two-layer staggering:
   // 1) card-level (cards in a grid)
   // 2) inside-card (title → text → footer)

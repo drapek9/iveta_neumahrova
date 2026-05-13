@@ -216,14 +216,14 @@ body > * {
 .logo {
   font-family: var(--font-display);
   font-size: 1.35rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.02em;
   text-decoration: none;
   color: var(--color-text);
 }
 
 .logo span {
-  font-weight: 400;
+  font-weight: 600;
   color: var(--color-accent);
 }
 
@@ -404,6 +404,13 @@ body > * {
   margin: 0 0 var(--space-md);
 }
 
+.hero__meta {
+  margin: calc(var(--space-md) * -0.35) 0 var(--space-md);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
 .hero__text {
   font-size: 1.125rem;
   color: var(--color-text-muted);
@@ -420,10 +427,20 @@ body > * {
 .hero__visual {
   position: relative;
   aspect-ratio: 4 / 5;
+  width: 100%;
+  max-width: min(100%, 26rem);
+  margin-inline: auto;
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: linear-gradient(145deg, var(--color-accent-soft) 0%, #d4ccc0 100%);
   box-shadow: var(--shadow-card);
+}
+
+@media (min-width: 900px) {
+  .hero__visual {
+    max-width: min(100%, 22.5rem);
+    margin-inline: auto 0;
+  }
 }
 
 .hero__visual img {
@@ -1389,6 +1406,10 @@ article.property-card:hover {
     transform: translate3d(-0.9rem, 0.35rem, 0);
   }
 
+  [data-reveal="slide-in"] {
+    transform: translate3d(0.95rem, 0.35rem, 0);
+  }
+
   [data-reveal="fade"] {
     transform: none;
   }
@@ -1400,6 +1421,20 @@ article.property-card:hover {
   [data-reveal].is-revealed {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+  }
+
+  /* O mně: trochu delší, klidnější vstupy */
+  .page-about .about-photo[data-reveal],
+  .page-about .about-stat[data-reveal] {
+    transition-duration: 0.72s, 0.72s;
+  }
+
+  .page-about .about-values__item[data-reveal] {
+    transition-duration: 0.58s, 0.58s;
+  }
+
+  .page-about .about-statement__text p[data-reveal] {
+    transition-duration: 0.62s, 0.62s;
   }
 
   .btn {
